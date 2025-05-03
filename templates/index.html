@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kursy walut</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .text-center-table th, .text-center-table td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1>Przelicznik walut</h1>
+        <div class="row align-items-start mb-6">
+            <div class="col-md-6">
+                <form method="post" action="/" class="mb-2">
+                    <div class="form-row align-items-end">
+                        <div class="col-1 mb-2">
+                            <label for="kwota" class="form-label">Mam:</label>
+                        </div>
+                        <div class="col-auto mb-2">
+                            <input name="kwota" step="1.00" type="number" class="form-control" id="kwota" placeholder="Kwota" style="width: 100px;" required>
+                        </div>
+                        <div class="col-7 mb-2">
+                            <select name="waluta_z" id="waluta_z" class="form-control" required>
+                                {% for currency in currencies %}
+                                    <option value="{{ currency }}" {% if currency == sel_cur_from %}selected{% endif %}>{{ currency }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-1 mb-2">
+                            <div class="col-auto mb-0">
+                                <button type="button" id="zamieni_waluty" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row align-items-end">
+                        <div class="col-2 mb-2">
+                            <label for="waluta_do" class="form-label">Chcę mieć:</label>
+                        </div>
+                        <div class="col-auto mb-2">
+                            <select name="waluta_do" id="waluta_do" class="form-control" required>
+                                {% for currency in currencies %}
+                                    <option value="{{ currency }}" {% if currency == sel_cur_to %}selected{% endif %}>{{ currency }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-auto mb-2">
+                            <button type="submit" class="btn btn-primary">PRZELICZ</button>
+                        </div>
+                        {% if text|length > 0 %}
+                        <div class="col-12 mt-2 alert alert-info text-center" role="alert">
+                            <b>Tyle otrzymasz:</b> {{ text[0] }}
+                        </div>
+                        {% endif %}
+                        {% if summary %}
+                        <div class="col-12 mt-2 alert alert-success text-center" role="alert">
+                            {{ summary }}
+                        </div>
+                        {% endif %}
+                    </div>
+                 </form>
+            </div>
+            <div class="col-md-6">
+                {% if text|length > 1%}
+                <div class="mt-0">
+                    <h3>Poprzednie wyliczenia:</h3>
+                    <ul class="list-group">
+                    {% for wynik in text %}
+                    {% if loop.index > 1 and loop.index <= 6 %}
+                        <li class="list-group-item">{{ wynik }}</li>
+                    {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        {% if tab_html or wykres_url %}
+        <br><h1>Historia kursów</h1>
+        <div class="container py-4">
+            <div class="form-row align-items-start">
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        {% if tab_html %}
+                            <h3>10 ostatnich notowań:</h3>
+                            {{tab_html|safe}}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                        {% if wykres_url %}
+                            <h3>Wykres kursu:</h3>
+                            <div>
+                                <img src="{{ url_for('static', filename=wykres_url.split('/')[-1]) }}" alt="Wykres Kursu {{ kod_waluty }}" class="img-fluid">
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const zamienWalutyButton = document.getElementById('zamieni_waluty');
+            const mamWaluteSelect = document.getElementById('waluta_z');
+            const chceOtrzymacWaluteSelect = document.getElementById('waluta_do');
+
+            zamienWalutyButton.addEventListener('click', function() {
+                const mamWybranaWaluta = mamWaluteSelect.value;
+                const chceOtrzymacWybranaWaluta = chceOtrzymacWaluteSelect.value;
+
+                let indexMam = -1;
+                let indexChce = -1;
+
+                for (let i = 0; i < mamWaluteSelect.options.length; i++) {
+                    if (mamWaluteSelect.options[i].value === chceOtrzymacWybranaWaluta) {
+                        indexMam = i;
+                    }
+                    if (chceOtrzymacWaluteSelect.options[i].value === mamWybranaWaluta) {
+                        indexChce = i;
+                    }
+                }
+
+                if (indexMam !== -1) {
+                    mamWaluteSelect.selectedIndex = indexMam;
+                }
+                if (indexChce !== -1) {
+                    chceOtrzymacWaluteSelect.selectedIndex = indexChce;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
