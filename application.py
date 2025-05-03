@@ -2,8 +2,6 @@ import requests
 import pandas as pd
 from flask import Flask, render_template, request
 from collections import deque
-
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
