@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 from flask import Flask, render_template, request
 from collections import deque
+
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -74,11 +76,6 @@ def pobierz_i_wyswietl_kursy_nbp_html(code_from: str, code_to: str, topcount: in
         filename = os.path.join(application.config['STATIC_FOLDER'], f'kurs.png')
         zapisz_wykres_kursu(df_html_kurs, code_kurs, filename)
 
-        styles = {
-            'Kurs': [{'selector': 'td', 'props': [('text-align', 'center')]}],
-            'Data': [{'selector': 'td', 'props': [('text-align', 'center')]}],
-            '': [{'selector': 'th', 'props': [('text-align', 'center')]}]
-        }
         tabela_html = df_html_kurs.to_html(index=False, classes=['table', 'text-center-table'])
         return tabela_html
 
