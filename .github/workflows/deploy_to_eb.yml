@@ -35,5 +35,5 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         if: success()
         run: |
-          eb init 'Kowerter Kursow Walut' -p python-3.13 --region ${{ vars.AWS_REGION }}
-          eb deploy KowerterKursowWalut-env
+          eb init 'kursy_walut' -p python-3.13 --region ${{ vars.AWS_REGION }}
+          eb deploy Kursywalut-env
