@@ -7,8 +7,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 
-
-
 application = Flask(__name__)
 STATIC_FOLDER = 'static'
 application.config['STATIC_FOLDER'] = STATIC_FOLDER
