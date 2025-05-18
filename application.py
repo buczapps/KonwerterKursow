@@ -115,7 +115,7 @@ def index():
             currency_data[code] = raw_currency_data['mid'][index]
     currency_data["PLN - polski złoty"] = 1
     # print(currency_data)
-    currency_list = list(currency_data.keys())
+    currency_list = sorted(list(currency_data.keys()))
     selected_currency_to = 'EUR - euro'
     selected_currency_from = 'PLN - polski złoty'
     podsumowanie = None
