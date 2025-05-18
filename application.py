@@ -23,6 +23,7 @@ def zapisz_wykres_kursu(df: pd.DataFrame, waluta_kod: str, filename: str):
     plt.savefig(filename)  # Zapisanie wykresu do pliku
     plt.close()  # Zamknięcie figury, aby zwolnić pamięć
 
+
 def pobierz_i_wyswietl_kursy_nbp_html(code_from: str, code_to: str, topcount: int = 10, table: str = "A") -> str:
 
     df_from = None

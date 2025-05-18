@@ -35,5 +35,5 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         if: success()
         run: |
-          eb init 'kursy_walut' -p python-3.13 --region ${{ vars.AWS_REGION }}
-          eb deploy Kursywalut-env
+          eb init cicd-20250518 -p python-3.13 --region ${{ vars.AWS_REGION }}
+          eb deploy Cicd-20250518-env
